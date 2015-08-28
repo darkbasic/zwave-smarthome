@@ -149,6 +149,28 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
         $route.reload();
     };
     /**
+     * Get route
+     */
+    
+     $scope.getRoute = function(name,params) {
+         var route = '';
+         console.log($route.routes)
+        var hasRoute = _.findWhere($route.routes, {name: name});
+        if(hasRoute){
+            var path = hasRoute.originalPath.substring(1).split('/');
+            console.log(path)
+            route =  hasRoute.originalPath;
+        }
+        return route;
+    };
+    console.log($scope.getRoute('dashboard'))
+    $scope.getRoute_ = function(name,params) {
+        if(cfg.routes[name]){
+            return cfg.routes[name]['url'] + (params || '');
+        }
+        return '';
+    };
+    /**
      * Redirect to given url
      */
     $scope.redirectToRoute = function(url) {

@@ -27,6 +27,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
                 }).
                  // Home
                 when('/home', {
+                   name: 'dashboard',
                    redirectTo: '/elements/dashboard/1'
                 }).
                 // Elements
