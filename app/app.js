@@ -32,6 +32,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
                 }).
                 // Elements
                 when('/elements/:filter?/:val?/:name?', {
+                    name: 'elements',
                     templateUrl: 'app/views/elements/elements.html',
                     requireLogin: true
                 }).

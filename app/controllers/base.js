@@ -153,20 +153,28 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
      */
     $scope.getRoute = function(name,params) {
          var route = '';
+          var path,param;
          console.log($route.routes)
         var hasRoute = _.findWhere($route.routes, {name: name});
         if(hasRoute){
-            var path = hasRoute.originalPath.substring(1).split('/');
+            path = hasRoute.originalPath.substring(1).split('/');
+            
              console.log(path)
             angular.forEach(path, function(v, k) {
-                console.log(v)
+                if(v.indexOf(':') > -1){
+                     param = v.replace(/[\:?]/g, "");
+                }else{
+                    
+                }
+               
+                console.log(segment)
             });
            
             route =  hasRoute.originalPath;
         }
         return route;
     };
-    console.log($scope.getRoute('dashboard'))
+    console.log($scope.getRoute('elements'))
     $scope.getRoute_ = function(name,params) {
         if(cfg.routes[name]){
             return cfg.routes[name]['url'] + (params || '');
