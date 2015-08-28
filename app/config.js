@@ -77,7 +77,7 @@ var config_data = {
         // Language directory
         'lang_dir': 'app/lang/',
         // Default language
-        'lang': 'en',
+        'lang': 'en',// !!!!Do not change it
         // List of supported languages
         'lang_list': ['en', 'de', 'ru', 'cn', 'fr'],
         // Role access
@@ -190,7 +190,7 @@ var config_data = {
         'page_results_events': 50,
         
         // ---------------------------------- Custom config for specifics app_type ---------------------------------- //
-        // Application type: default/popp/wd
+        // Application type : default/popp/wd
         'app_type': 'default',
         // Config
         'custom_cfg': {
