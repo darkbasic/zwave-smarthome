@@ -151,14 +151,17 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
     /**
      * Get route
      */
-    
-     $scope.getRoute = function(name,params) {
+    $scope.getRoute = function(name,params) {
          var route = '';
          console.log($route.routes)
         var hasRoute = _.findWhere($route.routes, {name: name});
         if(hasRoute){
             var path = hasRoute.originalPath.substring(1).split('/');
-            console.log(path)
+             console.log(path)
+            angular.forEach(path, function(v, k) {
+                console.log(v)
+            });
+           
             route =  hasRoute.originalPath;
         }
         return route;
