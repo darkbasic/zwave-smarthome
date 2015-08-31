@@ -182,7 +182,7 @@ var config_data = {
         // List of the find hosts
         'find_hosts': [
             'find.zwave.me',
-            'find.popp.eu'
+            'find.popp.eu' 
         ],
         // Results per page
         'page_results': 12,

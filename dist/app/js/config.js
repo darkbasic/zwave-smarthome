@@ -158,7 +158,7 @@ var config_data = {
         // List of the find hosts
         'find_hosts': [
             'find.zwave.me',
-            'find.popp.eu'
+            'find.popp.eu' 
         ],
         // Results per page
         'page_results': 12,
@@ -166,7 +166,7 @@ var config_data = {
         'page_results_events': 50,
         
         // ---------------------------------- Custom config for specifics app_type ---------------------------------- //
-        // Application type: default/popp/wd
+        // Application type : default/popp/wd
         'app_type': 'default',
         // Config
         'custom_cfg': {
