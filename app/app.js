@@ -247,9 +247,18 @@ myApp.config(['$routeProvider', function($routeProvider) {
 //        $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
 //    }
 //]);
-
+/**
+ * Set config
+ */
 var config_module = angular.module('myAppConfig', []);
-
+/**
+ * Delete default skin from skin array and merge with config_data
+ */
+delete skins_cfg['default'];
+angular.extend(config_data.cfg.skins,skins_cfg);
+/**
+ * Create config param
+ */
 angular.forEach(config_data, function(key, value) {
     config_module.constant(value, key);
 });

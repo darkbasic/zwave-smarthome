@@ -8,13 +8,17 @@ var myAppController = angular.module('myAppController', []);
 /**
  * Base controller
  */
-myAppController.controller('BaseController', function($scope, $cookies, $filter, $location, $route,$window, cfg, dataFactory, dataService, myCache) {
+myAppController.controller('BaseController', function($scope, $cookies, $filter, $location, $route, $window, cfg, dataFactory, dataService, myCache) {
     /**
      * Global scopes
      */
     $scope.cfg = cfg;
     $scope.loading = false;
     $scope.alert = {message: false, status: 'is-hidden', icon: false};
+    $scope.skin = {
+        main: {path: 'app/css/main.css'},
+        variant: null
+    };
     $scope.user = dataService.getUser();
     $scope.hostName = $location.host();
     $scope.ZWAYSession = dataService.getZWAYSession();
@@ -50,13 +54,13 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
     $scope.lang_list = cfg.lang_list;
     // Set language
     //$scope.lang = cfg.lang;
-     $scope.getLang = function(){
-         if($scope.user){
-             $scope.lang = $scope.user.lang;
-         }else{
+    $scope.getLang = function() {
+        if ($scope.user) {
+            $scope.lang = $scope.user.lang;
+        } else {
             $scope.lang = angular.isDefined($cookies.lang) ? $cookies.lang : cfg.lang;
-         }
-     };
+        }
+    };
     $scope.getLang();
     $cookies.lang = $scope.lang;
 
@@ -86,6 +90,26 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
         $scope.reverse = !$scope.reverse;
     };
 
+    /**
+     * Set skin
+     */
+    angular.extend($scope.user, {skin: 'default'});
+
+    $scope.setSkin = function() {
+        var skin;
+        var skinKey = $scope.user.skin || 'default';
+        if (cfg.skins[skinKey]) {
+            skin = cfg.skins[skinKey];
+            $scope.skin.main = skin.main.path;
+            if(skin.variant){
+                $scope.skin.variant =  skin.variant.path;
+            }
+            
+        }
+       
+    };
+    $scope.setSkin();
+     console.log($scope.skin)
     /**
      * Get body ID
      */
@@ -176,7 +200,7 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
         }
         return apps;
     };
-    
+
     /**
      * Redirect to Expert
      */
@@ -185,10 +209,10 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
             $window.location.href = url;
         }
     };
-     /**
+    /**
      * Expand/collapse element
      */
-     $scope.expand = {};
+    $scope.expand = {};
     $scope.expandElement = function(key) {
         $scope.expand[key] = !$scope.expand[key];
     };
