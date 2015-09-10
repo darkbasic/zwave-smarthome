@@ -5105,7 +5105,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     requireLogin: true,
                     roles: cfg.role_access.devices
                 }).
-                //Zwave device
+                //Zwave add
                 when('/zwave/add/:brandname?', {
                     templateUrl: 'app/views/zwave/zwave_add.html',
                     requireLogin: true,
@@ -5117,16 +5117,26 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     requireLogin: true,
                     roles: cfg.role_access.devices_include
                 }).
-                //Network
-                when('/zwave/manage', {
-                    templateUrl: 'app/views/zwave/zwave_manage.html',
+                //Zwave devices
+                when('/zwave/devices', {
+                    templateUrl: 'app/views/zwave/zwave_devices.html',
                     requireLogin: true
                 }).
-                //Network config
-                when('/zwave/manage/:nodeId/:nohistory?', {
+                //Zwave devices config
+                when('/zwave/devices/:nodeId/:nohistory?', {
                     templateUrl: 'app/views/zwave/zwave_manage_id.html',
                     requireLogin: true,
                     roles: cfg.role_access.network_config_id
+                }).
+                //Zwave battery
+                when('/zwave/batteries', {
+                    templateUrl: 'app/views/zwave/zwave_batteries.html',
+                    requireLogin: true
+                }).
+                //Zwave Network
+                when('/zwave/network', {
+                    templateUrl: 'app/views/zwave/zwave_network.html',
+                    requireLogin: true
                 }).
                 //Camera add
                 when('/camera/add', {
@@ -5236,9 +5246,18 @@ myApp.config(['$routeProvider', function($routeProvider) {
 //        $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
 //    }
 //]);
-
+/**
+ * Set config
+ */
 var config_module = angular.module('myAppConfig', []);
-
+/**
+ * Delete default skin from skin array and merge with config_data
+ */
+delete skins_cfg['default'];
+angular.extend(config_data.cfg.skins,skins_cfg);
+/**
+ * Create config param
+ */
 angular.forEach(config_data, function(key, value) {
     config_module.constant(value, key);
 });
@@ -8205,13 +8224,18 @@ var myAppController = angular.module('myAppController', []);
 /**
  * Base controller
  */
-myAppController.controller('BaseController', function($scope, $cookies, $filter, $location, $route,$window, cfg, dataFactory, dataService, myCache) {
+myAppController.controller('BaseController', function($scope, $cookies, $filter, $location, $route, $window, cfg, dataFactory, dataService, myCache) {
     /**
      * Global scopes
      */
     $scope.cfg = cfg;
     $scope.loading = false;
     $scope.alert = {message: false, status: 'is-hidden', icon: false};
+    $scope.skin = {
+        id: 'default',
+        path: 'app/css/main.css',
+        screen: 'app/css/screen.png'
+    };
     $scope.user = dataService.getUser();
     $scope.hostName = $location.host();
     $scope.ZWAYSession = dataService.getZWAYSession();
@@ -8247,13 +8271,13 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
     $scope.lang_list = cfg.lang_list;
     // Set language
     //$scope.lang = cfg.lang;
-     $scope.getLang = function(){
-         if($scope.user){
-             $scope.lang = $scope.user.lang;
-         }else{
+    $scope.getLang = function() {
+        if ($scope.user) {
+            $scope.lang = $scope.user.lang;
+        } else {
             $scope.lang = angular.isDefined($cookies.lang) ? $cookies.lang : cfg.lang;
-         }
-     };
+        }
+    };
     $scope.getLang();
     $cookies.lang = $scope.lang;
 
@@ -8283,6 +8307,24 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
         $scope.reverse = !$scope.reverse;
     };
 
+    /**
+     * Set skin
+     */
+    $scope.setSkin = function() {
+        if(!$scope.user){
+            return;
+        }
+        angular.extend($scope.user, {skin: 'default'});
+        var skin;
+        var skinKey = $scope.user.skin || 'default';
+        if (cfg.skins[skinKey]) {
+            skin = cfg.skins[skinKey];
+            $scope.skin.id = skinKey;
+            $scope.skin.path = skin.path;
+        }
+       
+    };
+    $scope.setSkin();
     /**
      * Get body ID
      */
@@ -8373,7 +8415,7 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
         }
         return apps;
     };
-    
+
     /**
      * Redirect to Expert
      */
@@ -8382,10 +8424,10 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
             $window.location.href = url;
         }
     };
-     /**
+    /**
      * Expand/collapse element
      */
-     $scope.expand = {};
+    $scope.expand = {};
     $scope.expandElement = function(key) {
         $scope.expand[key] = !$scope.expand[key];
     };
@@ -8589,7 +8631,7 @@ myAppController.controller('ElementController', function($scope, $routeParams, $
             var collection = dataService.getDevices(response.data.data.devices, filter, $scope.user.dashboard, null);
             if (collection.length < 1) {
                 if ($routeParams.filter === 'dashboard') {
-                    $scope.collection = dataService.getDevices(response.data.data.devices, null, $scope.user.dashboard, null);
+                    //$scope.collection = dataService.getDevices(response.data.data.devices, null, $scope.user.dashboard, null);
                     $scope.alert = {message: notFound, status: 'alert-warning', icon: 'fa-exclamation-circle'};
                     return;
                 }
@@ -10054,7 +10096,7 @@ myAppController.controller('ZwaveIncludeController', function($scope, $routePara
                         $interval.cancel($scope.includeDataInterval);
                         $scope.nodeId = nodeId;
                         $timeout(function() {
-                            $location.path('/zwave/manage/' + nodeId + '/nohistory');
+                            $location.path('/zwave/devices/' + nodeId + '/nohistory');
 
                         }, 3000);
 
@@ -10251,11 +10293,13 @@ myAppController.controller('ZwaveManageController', function($scope, $cookies, $
     /**
      * Set tab
      */
-    $scope.setTab = function(tabId) {
+    $scope.setTab = function() {
+         var path = $location.path().split('/').pop();
+         var tabId = (path === 'manage'? 'devices':path);
         $scope.activeTab = tabId;
         $cookies.tab_network = tabId;
     };
-
+    $scope.setTab()
 
     /**
      * Load data
@@ -10484,7 +10528,7 @@ myAppController.controller('ZwaveManageIdController', function($scope, $window, 
             $scope.loading = false;
            
             if(angular.isDefined($routeParams.nohistory)) {
-                $location.path('/zwave/manage');
+                $location.path('/zwave/devices');
             } else {
                 $window.history.back();
             }
@@ -12593,7 +12637,8 @@ myAppController.controller('MySettingsController', function($scope, $window, $lo
         hide_all_device_events: false,
         hide_system_events: false,
         hide_single_device_events: [],
-        interval: 2000
+        interval: 2000,
+        skin: $scope.skin.id
 
     };
     $scope.newPassword = null;
@@ -12605,7 +12650,10 @@ myAppController.controller('MySettingsController', function($scope, $window, $lo
         dataService.showConnectionSpinner();
         dataFactory.getApi('profiles', '/' + id, true).then(function(response) {
             loadDevices();
-            $scope.input = response.data.data;
+            //$scope.input = response.data.data;
+            //console.log($scope.input)
+            angular.extend($scope.input,response.data.data);
+            //console.log($scope.input)
             dataService.updateTimeTick();
         }, function(error) {
             $scope.input = false;

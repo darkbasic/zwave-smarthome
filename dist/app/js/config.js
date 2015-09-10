@@ -77,7 +77,7 @@ var config_data = {
         // Language directory
         'lang_dir': 'app/lang/',
         // Default language
-        'lang': 'en',// !!!!Do not change it
+        'lang': 'en', // !!!!Do not change it
         // List of supported languages
         'lang_list': ['en', 'de', 'ru', 'cn', 'fr'],
         // Role access
@@ -158,20 +158,27 @@ var config_data = {
         // List of the find hosts
         'find_hosts': [
             'find.zwave.me',
-            'find.popp.eu' 
+            'find.popp.eu'
         ],
         // Results per page
         'page_results': 12,
         // Results per events page
         'page_results_events': 50,
-        
+        //Skins
+        'skins': {
+            default: {
+                title: 'Default Z-Wave Skin',
+                path: 'app/css/main.css',
+                screen: 'app/css/screen.png'
+            }
+        },
         // ---------------------------------- Custom config for specifics app_type ---------------------------------- //
         // Application type : default/popp/wd
         'app_type': 'default',
         // Config
         'custom_cfg': {
-           'default': {
-               'logo': 'app/img/app-logo-default.png',
+            'default': {
+                'logo': 'app/img/app-logo-default.png',
                 hidden_apps: [
                     'Cron',
                     'BatteryPolling',

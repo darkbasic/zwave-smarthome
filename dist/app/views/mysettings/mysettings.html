@@ -34,6 +34,15 @@
                         </span>
                         <span ng-bind="input.color"></span>
                     </div>
+                     <!-- skins -->
+                    <div class="form-group form-inline">
+                        <label>{{_t('Skin')}}: </label>
+                        <select class="form-control" ng-model="input.skin">
+                            <!-- <option value="">--- Select one ---</option>-->
+                            <option ng-repeat="(k,v) in cfg.skins|orderBy:'title' track by $index" value="{{k}}" ng-selected="skin.id == k" ng-bind="v.title"></option>
+                        </select>
+                        <img class="skin-img" ng-src="{{cfg.skins[input.skin].screen}}" ng-if="cfg.skins[input.skin].screen" alt="img" />
+                    </div>
                     <!-- interval -->
                     <div class="form-group form-inline">
                         <label>{{_t('lb_interval')}}: </label>

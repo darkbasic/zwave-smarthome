@@ -95,12 +95,13 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
      * Set skin
      */
     $scope.setSkin = function() {
-        if(!$scope.user){
-            return;
-        }
-        angular.extend($scope.user, {skin: 'default'});
+        var skinKey = 'default';
         var skin;
-        var skinKey = $scope.user.skin || 'default';
+        if(angular.isDefined($cookies.skin)){
+            skinKey = $cookies.skin;
+        }else{
+             skinKey = $scope.user ? $scope.user.skin : 'default';
+        }
         if (cfg.skins[skinKey]) {
             skin = cfg.skins[skinKey];
             $scope.skin.id = skinKey;

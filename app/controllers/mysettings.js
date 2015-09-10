@@ -86,10 +86,11 @@ myAppController.controller('MySettingsController', function($scope, $window, $lo
 
             $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('success_updated')};
             $cookies.lang = input.lang;
+            $cookies.skin = input.skin;
             myCache.remove('profiles');
             dataService.setUser(data);
             $window.location.reload();
-            $window.history.back();
+            //$window.history.back();
             //$route.reload();
 
         }, function(error) {
