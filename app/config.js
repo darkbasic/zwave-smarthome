@@ -167,10 +167,9 @@ var config_data = {
         //Skins
         'skins': {
             default: {
-                main: {
-                    name: 'Default Z-Wave Skin',
-                    path: 'app/css/main.css'
-                }
+                title: 'Default Z-Wave Skin',
+                path: 'app/css/main.css',
+                screen: 'app/css/screen.png'
             }
         },
         // ---------------------------------- Custom config for specifics app_type ---------------------------------- //

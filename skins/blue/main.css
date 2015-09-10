@@ -953,7 +953,7 @@ http://codepen.io/MattIn4D/pen/LiKFC
 
 /* line 69, sass/globals/_navigation.scss */
 .navbar-inverse {
-  background-color: #E9E9E9;
+  background-color: blue;
   border-color: transparent;
   border-bottom: solid 4px #DDDDDD;
   color: #DDDDDD;
@@ -2409,20 +2409,11 @@ padding-right: 5px;
 }
 
 /* line 10, sass/modules/_mysettings.scss */
-.skin-img {
-  margin: 10px 0 0 0;
-  display: block;
-  border: solid 4px #d3d3d3;
-  max-width: 240px;
-  max-height: 240px;
-}
-
-/* line 17, sass/modules/_mysettings.scss */
 .profile-color:hover {
   text-decoration: none;
 }
 
-/* line 21, sass/modules/_mysettings.scss */
+/* line 14, sass/modules/_mysettings.scss */
 .profile-color.active {
   border: solid 2px #000;
 }

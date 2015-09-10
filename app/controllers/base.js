@@ -16,8 +16,9 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
     $scope.loading = false;
     $scope.alert = {message: false, status: 'is-hidden', icon: false};
     $scope.skin = {
-        main: {path: 'app/css/main.css'},
-        variant: null
+        id: 'default',
+        path: 'app/css/main.css',
+        screen: 'app/css/screen.png'
     };
     $scope.user = dataService.getUser();
     $scope.hostName = $location.host();
@@ -93,23 +94,21 @@ myAppController.controller('BaseController', function($scope, $cookies, $filter,
     /**
      * Set skin
      */
-    angular.extend($scope.user, {skin: 'default'});
-
     $scope.setSkin = function() {
+        if(!$scope.user){
+            return;
+        }
+        angular.extend($scope.user, {skin: 'default'});
         var skin;
         var skinKey = $scope.user.skin || 'default';
         if (cfg.skins[skinKey]) {
             skin = cfg.skins[skinKey];
-            $scope.skin.main = skin.main.path;
-            if(skin.variant){
-                $scope.skin.variant =  skin.variant.path;
-            }
-            
+            $scope.skin.id = skinKey;
+            $scope.skin.path = skin.path;
         }
        
     };
     $scope.setSkin();
-     console.log($scope.skin)
     /**
      * Get body ID
      */

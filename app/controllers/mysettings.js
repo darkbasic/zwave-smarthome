@@ -21,7 +21,8 @@ myAppController.controller('MySettingsController', function($scope, $window, $lo
         hide_all_device_events: false,
         hide_system_events: false,
         hide_single_device_events: [],
-        interval: 2000
+        interval: 2000,
+        skin: $scope.skin.id
 
     };
     $scope.newPassword = null;
@@ -33,7 +34,10 @@ myAppController.controller('MySettingsController', function($scope, $window, $lo
         dataService.showConnectionSpinner();
         dataFactory.getApi('profiles', '/' + id, true).then(function(response) {
             loadDevices();
-            $scope.input = response.data.data;
+            //$scope.input = response.data.data;
+            //console.log($scope.input)
+            angular.extend($scope.input,response.data.data);
+            //console.log($scope.input)
             dataService.updateTimeTick();
         }, function(error) {
             $scope.input = false;
